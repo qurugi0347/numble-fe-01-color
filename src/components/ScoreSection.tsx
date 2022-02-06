@@ -9,7 +9,7 @@ interface ScoreSectionProps {
 const ScoreSection: React.FC<ScoreSectionProps> = ({ score, stage, time }) => {
   return (
     <div>
-      스테이지 {score}, 남은 시간: {time}, 점수: {score}
+      스테이지 {stage}, 남은 시간: {time}, 점수: {score}
     </div>
   );
 };
