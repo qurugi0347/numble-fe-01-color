@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, MouseEventHandler } from "react";
 import styled from "styled-components";
 
 interface ColorButtonProps {
@@ -7,13 +7,14 @@ interface ColorButtonProps {
   brightness: number;
   isMutant: boolean;
   colorDiffValue: number;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 interface ButtonStyleProps {
   rgb: string;
 }
 
-const makeRGB: string = (h: number, s: number, v: number) => {
+const makeRGB: any = (h: number, s: number, v: number) => {
   let r: number, g: number, b: number;
 
   const i = Math.floor(h * 6);
@@ -56,6 +57,7 @@ const ColorButton: React.FC<ColorButtonProps> = ({
   brightness,
   isMutant,
   colorDiffValue,
+  onClick,
 }) => {
   const mutantedRgb: string = useMemo(() => {
     let rgbResult;
@@ -69,13 +71,17 @@ const ColorButton: React.FC<ColorButtonProps> = ({
       if (mutantedHue < 0) {
         mutantedHue += 360;
       }
-      rgbResult = makeRGB(mutantedHue / 360, saturation, brightness);
+      rgbResult = makeRGB(
+        mutantedHue / 360,
+        saturation * 0.9,
+        brightness * 0.9
+      );
     } else {
       rgbResult = makeRGB(hue / 360, saturation, brightness);
     }
     return rgbResult;
   }, [hue, saturation, brightness, isMutant, colorDiffValue]);
-  return <ColoredButton rgb={mutantedRgb} />;
+  return <ColoredButton rgb={mutantedRgb} onClick={onClick} />;
 };
 
 const ColoredButton = styled.div<ButtonStyleProps>`
