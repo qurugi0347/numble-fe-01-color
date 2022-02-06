@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 interface ColorButtonProps {
-  r: number;
-  g: number;
-  b: number;
+  hue: number;
+  saturation: number;
+  brightness: number;
   isMutant: boolean;
   colorDiffValue: number;
 }
@@ -13,25 +13,68 @@ interface ButtonStyleProps {
   rgb: string;
 }
 
+const makeRGB: string = (h: number, s: number, v: number) => {
+  let r: number, g: number, b: number;
+
+  const i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = v * (1 - s);
+  const q = v * (1 - f * s);
+  const t = v * (1 - (1 - f) * s);
+
+  switch (i % 6) {
+    case 0:
+      (r = v), (g = t), (b = p);
+      break;
+    case 1:
+      (r = q), (g = v), (b = p);
+      break;
+    case 2:
+      (r = p), (g = v), (b = t);
+      break;
+    case 3:
+      (r = p), (g = q), (b = v);
+      break;
+    case 4:
+      (r = t), (g = p), (b = v);
+      break;
+    case 5:
+      (r = v), (g = p), (b = q);
+      break;
+  }
+
+  return [
+    Math.floor(r * 255),
+    Math.floor(g * 255),
+    Math.floor(b * 255),
+  ].toString();
+};
+
 const ColorButton: React.FC<ColorButtonProps> = ({
-  r,
-  g,
-  b,
+  hue,
+  saturation,
+  brightness,
   isMutant,
   colorDiffValue,
 }) => {
-  const mutantedRgb = useMemo(() => {
+  const mutantedRgb: string = useMemo(() => {
+    let rgbResult;
     if (isMutant) {
-      let newR = r;
-      let newG = g;
-      let newB = b;
-      let diff = colorDiffValue;
-      // 색깔 다르게 출력해주는거 해야됨
-
-      return [newR, newG, newB].join(",");
+      let mutantedHue = hue;
+      if (Math.floor(Math.random() - 0.5) > 0) {
+        mutantedHue += colorDiffValue;
+      } else {
+        mutantedHue -= colorDiffValue;
+      }
+      if (mutantedHue < 0) {
+        mutantedHue += 360;
+      }
+      rgbResult = makeRGB(mutantedHue / 360, saturation, brightness);
+    } else {
+      rgbResult = makeRGB(hue / 360, saturation, brightness);
     }
-    return [r, g, b].join(",");
-  }, [r, g, b, isMutant, colorDiffValue]);
+    return rgbResult;
+  }, [hue, saturation, brightness, isMutant, colorDiffValue]);
   return <ColoredButton rgb={mutantedRgb} />;
 };
 

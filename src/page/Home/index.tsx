@@ -24,13 +24,14 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
     const buttons = [];
     const renderCount = Math.pow(rowCount, 2);
     const answerIndex = Math.floor(Math.random() * 9);
+    const hue = Math.floor(Math.random() * 360);
     for (let i = 0; i < renderCount; i++) {
       buttons.push(
         <ColorButton
           key={i}
-          r={255}
-          g={0}
-          b={0}
+          hue={hue}
+          saturation={1}
+          brightness={1}
           isMutant={i === answerIndex}
           colorDiffValue={100}
         />
