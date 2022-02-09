@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import ScoreSection from "@/components/ScoreSection";
 import ColorButton from "@/components/ColorButton";
+import useTimer from "@/hooks/useTimer";
 
 interface EmptyProps {}
 interface GamePannelProps {
@@ -11,9 +12,9 @@ interface GamePannelProps {
 }
 
 const Home: React.FC<EmptyProps> = (EmptyProps) => {
-  const [score, setScore] = useState(0);
-  const [time, setTime] = useState(15);
-  const [stage, setStage] = useState(1);
+  const [score, setScore] = useState<number>(0);
+  const { time, resetTimer, addTime } = useTimer(15);
+  const [stage, setStage] = useState<number>(1);
 
   const rowCount: number = useMemo(() => {
     return Math.round((stage + 0.5) / 2) + 1;
@@ -21,20 +22,14 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
 
   useEffect(() => {
     setScore((prevScore) => prevScore + Math.pow(stage, 3) * time);
-    setTime(15);
-    const intervalId = setInterval(() => {
-      setTime((prevTime) => prevTime - 1);
-    }, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
+    resetTimer(15);
   }, [stage]);
 
   useEffect(() => {
-    if (time === 0) {
-      alert("GAME OVER");
+    if (time <= 0) {
+      alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
       setStage(1);
-      setTime(15);
+      resetTimer(15);
     }
   }, [time]);
 
@@ -42,24 +37,26 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
     if (correct) {
       setStage((nowStage) => nowStage + 1);
     } else {
-      setTime((prevTime) => prevTime - 3);
+      addTime(-3);
     }
   };
 
   const renderedColorButton: JSX.Element = useMemo(() => {
     const buttons = [];
     const renderCount = Math.pow(rowCount, 2);
-    const answerIndex = Math.floor(Math.random() * rowCount);
+    const answerIndex = Math.floor(Math.random() * rowCount * rowCount);
     const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.random() * 0.3 + 0.7;
+    const brightness = Math.random() * 0.5 + 0.5;
     for (let i = 0; i < renderCount; i++) {
       buttons.push(
         <ColorButton
           key={i}
           hue={hue}
-          saturation={1}
-          brightness={1}
+          saturation={saturation}
+          brightness={brightness}
           isMutant={i === answerIndex}
-          colorDiffValue={Math.max(40 - stage * 2, 1)}
+          colorDiffValue={Math.max(40 - stage * 2.5, 4)}
           onClick={() => {
             clickPannel(i === answerIndex);
           }}
