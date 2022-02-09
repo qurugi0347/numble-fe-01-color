@@ -44,10 +44,11 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
   const renderedColorButton: JSX.Element = useMemo(() => {
     const buttons = [];
     const renderCount = Math.pow(rowCount, 2);
-    const answerIndex = Math.floor(Math.random() * rowCount * rowCount);
+    const answerIndex = Math.floor(Math.random() * renderCount);
+    console.log(answerIndex);
     const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.random() * 0.3 + 0.7;
-    const brightness = Math.random() * 0.5 + 0.5;
+    const saturation = Math.max(0.03 * (33 - stage), 0.3);
+    const brightness = Math.max(0.03 * (33 - stage), 0.3);
     for (let i = 0; i < renderCount; i++) {
       buttons.push(
         <ColorButton
@@ -56,7 +57,7 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
           saturation={saturation}
           brightness={brightness}
           isMutant={i === answerIndex}
-          colorDiffValue={Math.max(40 - stage * 2.5, 4)}
+          colorDiffValue={Math.max(40 - stage * 2.5, 10)}
           onClick={() => {
             clickPannel(i === answerIndex);
           }}
