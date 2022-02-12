@@ -9,12 +9,12 @@ console.log("ENV_FILE: ", envPath);
 const { SAMPLE_ENV } = process.env;
 
 const inAppEnv = { SAMPLE_ENV };
-
+const mode = NODE_ENV || "development";
 module.exports = {
-  mode: NODE_ENV || "development",
+  mode: mode,
   output: {
     filename: "bundle.js",
-    publicPath: "/",
+    publicPath: mode ? "/numble-fe-01-color/" : "/",
   },
   resolve: {
     modules: [

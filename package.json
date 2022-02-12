@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/index.tsx",
+  "homepage": "http://qurugi0347.github.io/numble-fe-01-color",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ENV_FILE=.env webpack",
+    "build": "cross-env NODE_ENV=production ENV_FILE=.env webpack",
     "dev": "cross-env NODE_ENV=development ENV_FILE=.env.development webpack-dev-server",
     "build:dev": "cross-env NODE_ENV=development ENV_FILE=.env.development webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eslint": "eslint --fix ./src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -43,6 +46,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.28.0",
     "file-loader": "^6.2.0",
+    "gh-pages": "^3.2.3",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.45.1",
     "sass-loader": "^12.4.0",
