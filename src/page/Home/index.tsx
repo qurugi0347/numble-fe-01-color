@@ -21,7 +21,8 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
   }, [stage]);
 
   useEffect(() => {
-    setScore((prevScore) => prevScore + Math.pow(stage, 3) * time);
+    // stage가 바뀐 다음 점수체크를 해서 stage - 1
+    setScore((prevScore) => prevScore + Math.pow(stage - 1, 3) * time);
     resetTimer(15);
   }, [stage]);
 
