@@ -28,6 +28,7 @@ const Home: React.FC<EmptyProps> = (EmptyProps) => {
   useEffect(() => {
     if (time <= 0) {
       alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
+      setScore(0);
       setStage(1);
       resetTimer(15);
     }
